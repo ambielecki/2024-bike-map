@@ -6,4 +6,6 @@ use App\Models\Route;
 
 interface RouteServiceInterface {
     public function createRoute(int $userId, string $name, $file): ?Route;
+
+    public function getRoutes(int $userId, array $filters = []);
 }

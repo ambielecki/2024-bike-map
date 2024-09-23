@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('timestamp')->unique();
             $table->json('data');
+            $table->json('lat_lng');
             $table->timestamps();
         });
     }

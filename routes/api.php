@@ -10,6 +10,7 @@ if (app()->isLocal()) {
 }
 
 Route::group(['prefix' => 'routes'], function () {
+    Route::get('/{id}', [RouteController::class, 'show']);
     Route::get('/', [RouteController::class, 'index']);
     Route::post('/', [RouteController::class, 'create']);
 });
