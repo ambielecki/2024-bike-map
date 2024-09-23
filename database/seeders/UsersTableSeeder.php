@@ -15,9 +15,11 @@ class UsersTableSeeder extends Seeder
     public function run(): void
     {
         $user = new User();
-        $user->name = config('app.initial_user.name');
+        $user->first_name = config('app.initial_user.first_name');
+        $user->last_name = config('app.initial_user.last_name');
         $user->email = config('app.initial_user.email');
         $user->password = Hash::make(config('app.initial_user.password'));
+        $user->is_admin = 1;
         $user->save();
     }
 }

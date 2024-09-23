@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Route extends Model
 {
@@ -29,8 +30,12 @@ class Route extends Model
     protected function date(): Attribute {
         return Attribute::make(
             get: function ($value, array $attributes) {
-                return date('Y-m-d H:i', $attributes['timestamp']);
+                return date('Y-m-d', $attributes['timestamp']);
             },
         );
+    }
+
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class);
     }
 }

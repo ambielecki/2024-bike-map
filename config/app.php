@@ -124,7 +124,8 @@ return [
     ],
 
     'initial_user' => [
-        'name' => env('APP_INITIAL_USER_NAME', 'Testy McTesterson'),
+        'first_name' => env('APP_INITIAL_USER_FIRST_NAME', 'Testy'),
+        'last_name' => env('APP_INITIAL_USER_LAST_NAME', 'McTesterson'),
         'email' => env('APP_INITIAL_USER_EMAIL', 'testy@example.com'),
         'password' => env('APP_INITIAL_USER_PASSWORD', 'Ch@ng3m3'),
     ],

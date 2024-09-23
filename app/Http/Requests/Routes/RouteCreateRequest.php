@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Routes;
 
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
+use App\Http\Requests\BikeMapRequest;
 
-class RouteCreateRequest extends FormRequest {
+class RouteCreateRequest extends BikeMapRequest {
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -24,11 +22,5 @@ class RouteCreateRequest extends FormRequest {
             'name' => 'string|required',
             'file' => 'file|required',
         ];
-    }
-
-    protected function failedValidation(Validator $validator) {
-        throw new HttpResponseException(response()->json(
-            ['errors' => $validator->errors()], 422)
-        );
     }
 }
