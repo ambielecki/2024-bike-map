@@ -2,14 +2,19 @@
 
 namespace App\Services\Routes;
 
+use App\Models\Exclusion;
 use App\Models\Route;
+use App\Models\User;
+use Illuminate\Support\Collection;
+use Location\Coordinate;
+use Location\Polygon;
 
 class RouteService implements RouteServiceInterface {
     public function createRoute(int $userId, string $name, $file): ?Route {
         $fileService = new FitFileService();
 
         $data = $fileService->getLatLongFromFile($file);
-        $latLng = $this->mapLatLngToArray($data);
+        $latLng = $this->mapLatLngToArray($data, $userId);
         $timestamp = $fileService->getTimestampFromFile($file);
 
         $route = new Route();
@@ -27,27 +32,35 @@ class RouteService implements RouteServiceInterface {
         return null;
     }
 
-    public function getRoutes(int $userId, array $filters = []) {
-        $filters = array_flip($filters);
-
+    public function getRoutes(int $userId, array $filters = []): Collection {
         $query = Route::query()->where('user_id', $userId);
 
-        if (isset($filters['no_lat_lng'])) {
+        if (!empty($filters['condensed'])) {
             $query = $query->select('id', 'name', 'timestamp');
         }
 
-        $routes = $query->get();
-
-        return $routes;
+        return $query->get();
     }
 
     public function getRoute(int $id): ?Route {
         return Route::query()->find($id);
     }
 
-    private function mapLatLngToArray(array $data): array {
+    private function mapLatLngToArray(array $data, ?int $userId): array {
+        $exclusionZone = null;
+        if ($userId) {
+            $exclusion = Exclusion::query()->where('user_id', $userId)->first();
+            if ($exclusion) {
+                $exclusionZone = $exclusion->getPolygon();
+            }
+        }
+
         $latLng = [];
-        foreach ($data as $timestamp => $latLngData) {
+        foreach ($data as $latLngData) {
+            if ($exclusionZone && $exclusionZone->contains(new Coordinate($latLngData['lat'], $latLngData['lng']))) {
+                continue;
+            }
+
             $latLng[] = [$latLngData['lat'], $latLngData['lng']];
         }
 
