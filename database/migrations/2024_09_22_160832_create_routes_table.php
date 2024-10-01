@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->string('name');
+            $table->text('description')->nullable();
             $table->integer('timestamp')->unique();
             $table->json('data');
             $table->json('lat_lng');
