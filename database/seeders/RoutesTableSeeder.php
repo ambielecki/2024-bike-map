@@ -17,8 +17,10 @@ class RoutesTableSeeder extends Seeder
         $routeService = new RouteService();
 
         foreach ($files as $file) {
+            $name = fake()->word();
+            $description = fake()->sentence();
             if (is_file(storage_path('fit/' . $file))) {
-                $routeService->createRoute(1, 'test', storage_path('fit/' . $file));
+                $routeService->createRoute(1, $name, storage_path('fit/' . $file), $description,);
             }
         }
     }

@@ -21,6 +21,7 @@ class RouteCreateRequest extends BikeMapRequest {
         return [
             'name' => 'string|required',
             'file' => 'file|required',
+            'description' => 'string',
         ];
     }
 }

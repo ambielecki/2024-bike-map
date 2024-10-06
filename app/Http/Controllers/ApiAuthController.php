@@ -29,8 +29,8 @@ class ApiAuthController extends Controller
         } catch (\Exception $exception) {
             return response()->json(JsonResponseData::formatData(
                 $request,
-                'Failed Creating New User',
-                Message::MESSAGE_ERROR,
+                [],
+                'Failed Creating New User', Message::MESSAGE_ERROR,
             ), 409);
         }
 
@@ -53,9 +53,9 @@ class ApiAuthController extends Controller
         if (!$token = auth('api')->attempt($credentials)) {
             return response()->json(JsonResponseData::formatData(
                 $request,
+                [],
                 'User/password not found, please try again',
                 Message::MESSAGE_ERROR,
-                [],
             ), 401);
         }
 
@@ -68,9 +68,9 @@ class ApiAuthController extends Controller
 
         return response()->json(JsonResponseData::formatData(
             $request,
+            [],
             'Successfully logged out',
             Message::MESSAGE_SUCCESS,
-            [],
         ));
     }
 
@@ -83,9 +83,9 @@ class ApiAuthController extends Controller
     {
         return response()->json(JsonResponseData::formatData(
             $request,
+            [],
             'You Must Be Logged In to View this Page',
             Message::MESSAGE_ERROR,
-            [],
         ), 401);
     }
 
@@ -103,9 +103,9 @@ class ApiAuthController extends Controller
 
         return response()->json(JsonResponseData::formatData(
             $request,
+            $data,
             $message,
             $message_type,
-            $data,
         ));
     }
 
@@ -117,17 +117,17 @@ class ApiAuthController extends Controller
         if ($status === Password::RESET_LINK_SENT) {
             return response()->json(JsonResponseData::formatData(
                 $request,
+                [],
                 __($status),
                 Message::MESSAGE_SUCCESS,
-                [],
             ));
         }
 
         return response()->json(JsonResponseData::formatData(
             $request,
+            [],
             __($status),
             Message::MESSAGE_ERROR,
-            [],
         ), 500);
     }
 
@@ -148,17 +148,17 @@ class ApiAuthController extends Controller
         if ($status === Password::PASSWORD_RESET) {
             return response()->json(JsonResponseData::formatData(
                 $request,
+                [],
                 __($status),
                 Message::MESSAGE_SUCCESS,
-                [],
             ));
         }
 
         return response()->json(JsonResponseData::formatData(
             $request,
+            [],
             __($status),
             Message::MESSAGE_ERROR,
-            [],
         ), 500);
     }
 }

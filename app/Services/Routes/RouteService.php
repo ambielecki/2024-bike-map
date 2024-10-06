@@ -2,25 +2,40 @@
 
 namespace App\Services\Routes;
 
+use App\Library\JsonResponseData;
+use App\Library\Message;
 use App\Models\Exclusion;
 use App\Models\Route;
-use App\Models\User;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Collection;
 use Location\Coordinate;
-use Location\Polygon;
 
 class RouteService implements RouteServiceInterface {
-    public function createRoute(int $userId, string $name, $file): ?Route {
+    public function createRoute(int $userId, string $name, $file, $description, $request = null): ?Route {
         $fileService = new FitFileService();
 
         $data = $fileService->getLatLongFromFile($file);
         $latLng = $this->mapLatLngToArray($data, $userId);
         $timestamp = $fileService->getTimestampFromFile($file);
 
+        if ($request && !$this->isRouteUnique($timestamp)) {
+            throw new HttpResponseException(response()->json(
+                JsonResponseData::formatData(
+                    $request,
+                    [
+                        'errors' => ['file' => ['File Has Already Been Uploaded.']],
+                        'status' => true,
+                    ],
+                    'Validation Failed',
+                    Message::MESSAGE_ERROR)
+                , 422));
+        }
+
         $route = new Route();
 
         $route->user_id = $userId;
         $route->name = $name;
+        $route->description = $description;
         $route->data = $data;
         $route->lat_lng = $latLng;
         $route->timestamp = $timestamp;
@@ -65,5 +80,13 @@ class RouteService implements RouteServiceInterface {
         }
 
         return $latLng;
+    }
+
+    public function isRouteUnique(int $timestamp): bool {
+        $route = Route::query()
+            ->where('timestamp', $timestamp)
+            ->first();
+
+        return $route === null;
     }
 }

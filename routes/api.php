@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [ApiAuthController::class, 'postRegister']);
 Route::post('/login', [ApiAuthController::class, 'postLogin']);
-Route::post('/refresh', [ApiAuthController::class, 'postRefresh']);
 Route::post('/request-password-reset', [ApiAuthController::class, 'postRequestPasswordReset']);
 Route::post('/password-reset', [ApiAuthController::class, 'postResetPassword']);
 
@@ -19,10 +18,14 @@ if (app()->isLocal()) {
 Route::group(['prefix' => 'routes'], function () {
     Route::get('/{id}', [RouteController::class, 'show']);
     Route::get('/', [RouteController::class, 'index']);
-    Route::post('/', [RouteController::class, 'create']);
+
+    Route::group(['middleware' => ['auth:api']], function () {
+        Route::post('/', [RouteController::class, 'create']);
+    });
 });
 
 Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/user', [ApiUserController::class, 'getUser']);
+    Route::post('/refresh', [ApiAuthController::class, 'postRefresh']);
     Route::post('/logout', [ApiAuthController::class, 'postLogout']);
 });

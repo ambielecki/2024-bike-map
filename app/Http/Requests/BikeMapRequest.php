@@ -13,12 +13,12 @@ class BikeMapRequest extends FormRequest {
         throw new HttpResponseException(response()->json(
             JsonResponseData::formatData(
                 $this,
-                'Validation Failed',
-                Message::MESSAGE_ERROR,
                 [
                     'errors' => $validator->errors(),
                     'status' => true,
-                ])
+                ],
+                'Validation Failed',
+                Message::MESSAGE_ERROR)
             , 422));
     }
 }

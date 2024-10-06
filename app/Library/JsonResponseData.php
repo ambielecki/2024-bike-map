@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 class JsonResponseData {
     public static function formatData(
         Request $request,
+        array $data = [],
         string $message = '',
         string $message_type = Message::MESSAGE_OK,
-        array $data = []
     ): array
     {
         return [

@@ -16,9 +16,9 @@ class ApiUserController extends Controller
     public function getUser(Request $request): JsonResponse {
         return response()->json(JsonResponseData::formatData(
             $request,
+            ['user' => $request->user()],
             '',
             Message::MESSAGE_OK,
-            ['user' => $request->user()],
         ));
     }
 
@@ -29,9 +29,9 @@ class ApiUserController extends Controller
             if ($user->email === 'testy@test.com' || $user->email === 'automation@test.com') {
                 return response()->json(JsonResponseData::formatData(
                     $request,
+                    [],
                     'Do not mess with my test user :)',
                     Message::MESSAGE_ERROR,
-                    [],
                 ), 401);
             }
             if (Hash::check($request->input('current_password'), $user->password)) {
@@ -43,33 +43,33 @@ class ApiUserController extends Controller
 
                     return response()->json(JsonResponseData::formatData(
                         $request,
+                        [],
                         'There was a problem updating your password',
                         Message::MESSAGE_ERROR,
-                        [],
                     ), 500);
                 }
 
                 return response()->json(JsonResponseData::formatData(
                     $request,
+                    [],
                     'Password Updated Successfully',
                     Message::MESSAGE_OK,
-                    [],
                 ));
             }
 
             return response()->json(JsonResponseData::formatData(
                 $request,
+                [],
                 'Current Password Is Incorrect',
                 Message::MESSAGE_WARNING,
-                [],
             ), 401);
         }
 
         return response()->json(JsonResponseData::formatData(
             $request,
+            [],
             'There was a problem finding your user',
             Message::MESSAGE_ERROR,
-            [],
         ), 500);
     }
 }
